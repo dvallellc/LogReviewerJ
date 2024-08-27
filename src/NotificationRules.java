@@ -5,36 +5,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NotificationRules {
-    private ArrayList<Pattern> _patterns;
+    private ArrayList<NotificationRule> _rules;
 
     public NotificationRules(File rulesFile){
-        _patterns = new ArrayList<Pattern>();
+        _rules = new ArrayList<NotificationRule>();
         if(rulesFile.exists()){
             try{
                 Scanner rulesScanner = new Scanner(rulesFile);
-                String ruleToAdd;
                 while(rulesScanner.hasNextLine()){
-                    ruleToAdd = rulesScanner.nextLine();
-                    Pattern toAdd = Pattern.compile(ruleToAdd, Pattern.CASE_INSENSITIVE);
-                    _patterns.add(toAdd);
+                    _rules.add(new NotificationRule(rulesScanner.nextLine()));
                 }
             }
             catch(Exception e){
 
             }
-
         }
     }
-    public boolean IsMatch(String text){
-        Matcher matcher;
-        for(int i = 0; i < _patterns.size(); i++){
-            matcher = _patterns.get(i).matcher(text);
-            boolean matchFound = matcher.find();
-            if(matchFound){
-                return true;
+    public NotificationRule IsMatch(String source, String text){
+        for(int i = 0; i < _rules.size(); i++){
+            NotificationRule toCheck = _rules.get(i);
+            if(toCheck.IsMatch(source, text)){
+                return toCheck;
+            }
+            else{
+                //System.out.println("NOT A MATCH");
             }
         }
-        return false;
+        return null;
     }
 
 }

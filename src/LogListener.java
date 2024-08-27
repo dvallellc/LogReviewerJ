@@ -6,6 +6,7 @@ public class LogListener {
     private boolean _running;
     private int _listeningPort;
     private int _bufferSize;
+    private Emailer _emailer;
 
     private byte[] _buffer;
 
@@ -16,10 +17,11 @@ public class LogListener {
      * @param port
      * @param bufferSize
      */
-    public LogListener(int port, int bufferSize, NotificationRules rules) {
+    public LogListener(int port, int bufferSize, NotificationRules rules, String emailCredPath) {
         _listeningPort = port;
         _bufferSize = bufferSize;
         _rules = rules;
+        _emailer = new Emailer(emailCredPath);
         try {
             _udpSocket = new DatagramSocket(_listeningPort);
             _buffer = new byte[_bufferSize];
@@ -38,8 +40,11 @@ public class LogListener {
             try{
                 _udpSocket.receive(received);
                 String receivedString = new String(received.getData());
-                if(_rules.IsMatch(receivedString)) {
-                    System.out.println(receivedString);
+                System.out.println(receivedString);
+                String fromAddress = received.getAddress().getHostAddress();
+                NotificationRule matchingRule = _rules.IsMatch(fromAddress, receivedString);
+                if(matchingRule != null){
+                    _emailer.SendMail("dan@danielvalle.net", matchingRule.GetSubject(),receivedString,fromAddress);
                 }
             }
             catch(Exception e){
