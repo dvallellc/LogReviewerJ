@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="LogReviewerJ:jar">
+    <output-path>$PROJECT_DIR$/../../externaljars</output-path>
+    <root id="archive" name="LogReviewerJ.jar">
+      <element id="module-output" name="LogReviewerJ" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../externaljars/EmailerJ.jar" path-in-jar="/" />
+      <element id="library" level="project" name="EmailerJ" />
+    </root>
+  </artifact>
+</component>

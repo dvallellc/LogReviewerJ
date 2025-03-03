@@ -1,6 +1,7 @@
 import java.io.File;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Date;
 
 public class LogListener {
     private boolean _running;
@@ -45,6 +46,7 @@ public class LogListener {
                 NotificationRule matchingRule = _rules.IsMatch(fromAddress, receivedString);
                 if(matchingRule != null){
                     _emailer.SendMail("dan@danielvalle.net", matchingRule.GetSubject(),receivedString,fromAddress);
+                    DBWriter.AddToDB(receivedString, fromAddress, new Date().toString());
                 }
             }
             catch(Exception e){
