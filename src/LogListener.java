@@ -36,9 +36,11 @@ public class LogListener {
     }
     private void Listen(){
         System.out.println("Listening on port " + _listeningPort);
+        _emailer.SendMail("dan@danielvalle.net", "SysLog Online","SysLog Online","N/A");
         DatagramPacket received = new DatagramPacket(_buffer, _bufferSize);
         while(_running){
             try{
+
                 _udpSocket.receive(received);
                 String receivedString = new String(received.getData());
                 System.out.println(receivedString);
@@ -54,6 +56,7 @@ public class LogListener {
             }
 
         }
+        _emailer.SendMail("dan@danielvalle.net", "SysLog Offline","SysLog Offline","N/A");
         System.out.println("Listener thread exiting.");
     }
 }
