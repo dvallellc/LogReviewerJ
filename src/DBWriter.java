@@ -28,7 +28,7 @@ public class DBWriter {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, dt );
             if(message.length() > 255){
-                message = message.substring(1,255);
+                message = message.substring(0,254);
             }
             ps.setString(2, message);
             ps.setString(3, ipAddr);
